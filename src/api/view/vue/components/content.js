@@ -1,8 +1,8 @@
-import myActordetail from './content/actordetail.js'
-import myIntro from './content/intro.js'
-import myMoviedetail from './content/moviedetail.js'
-import mySearchresult from './content/searchresult.js'
-import myLoadingscreen from './content/loadingscreen.js'
+import myActordetail from './contentcomp/actordetail.js'
+import myIntro from './contentcomp/intro.js'
+import myMoviedetail from './contentcomp/moviedetail.js'
+import mySearchresult from './contentcomp/searchresult.js'
+import myLoadingscreen from './contentcomp/loadingscreen.js'
 
 export default {
     data() {

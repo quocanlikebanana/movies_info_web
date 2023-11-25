@@ -1,11 +1,11 @@
-import myHeader from '../../../../../Web/Test/2/BTCN2/component/header.js'
-import myNavbar from '../../../../../Web/Test/2/BTCN2/component/navbar.js'
-import myContent from '../../../../../Web/Test/2/BTCN2/component/content.js'
-import myFooter from '../../../../../Web/Test/2/BTCN2/component/footer.js'
+import myHeader from './components/header.js'
+import myNavbar from './components/navbar.js'
+import myContent from './component/content.js'
+import myFooter from './component/footer.js'
 
 import { computed } from 'vue';
 
-import { fetch } from '../../../../../Web/Test/2/BTCN2/DBProvider.js'
+// import { fetch } from '../../../../../Web/Test/2/BTCN2/DBProvider.js'
 
 export default {
     data() {
@@ -27,26 +27,9 @@ export default {
         }
     },
 
-    // Has same effect
     async created() {
-        // this.currentContentView = 'myLoadingscreen';
-        // this.currentContentView = 'myIntro';
-        // this.currentContentView = 'myMoviedetail';
-        // this.currentContentView = 'myActordetail';
-        // this.currentContentView = 'mySearchresult';
-
         this.goIntroDuction();
     },
-
-    // async mounted() {
-    //     // this.currentContentView = 'myLoadingscreen';
-    //     // this.currentContentView = 'myIntro';
-    //     // this.currentContentView = 'myMoviedetail';
-    //     // this.currentContentView = 'myActordetail';
-    //     // this.currentContentView = 'mySearchresult';
-
-    //     this.goIntroDuction();
-    // },
 
     provide() {
         return {

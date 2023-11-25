@@ -1,4 +1,4 @@
-import { toggleDarkMode } from '../script.js';
+import { toggleDarkMode } from '../../public/script.js';
 
 export default {
     data() {
