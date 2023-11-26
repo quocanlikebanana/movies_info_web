@@ -31,10 +31,16 @@ class Movie {
         }
     }
 
+    static async getAll() {
+        const rawMovies = await (await dbService).getAll('movie');
+        const movies = rawMovies.map(rawMovie => { return new Movie(rawMovie) });
+        return movies;
+    }
+
     static async getDetail(id) {
         const res = new Movie((await dbService).getDetail('movie', id));
-
-        res.reference.actor_list
+        res.reference.actor_list = await (await dbService).getActorList(id);
+        // TODO
     }
 }
 

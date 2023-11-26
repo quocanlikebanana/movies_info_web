@@ -1,9 +1,5 @@
 const { fsPromise, path } = require('../../../config/lib');
-const { pgp } = require('./dbLib');
-const { connection, DbAccess, baseDb } = require('./dbLib');
-const { ObjectInsert } = require('./dbLib');
-
-
+const { pgp, connection, DbAccess, baseDb, ObjectInsert } = require('./dbLib');
 
 async function ReadDataTo(db) {
     const fileContent = JSON.parse(await fsPromise.readFile(path.join(__dirname, '../../../data/data.json'), { encoding: 'utf-8' }));
@@ -204,4 +200,5 @@ async function InitDatabase(dbName) {
     // await ReadDataTo(db); // Force to read
     return db;
 }
-exports.InitDatabase = InitDatabase;
+
+module.exports = { InitDatabase };

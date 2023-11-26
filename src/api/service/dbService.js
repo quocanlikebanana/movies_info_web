@@ -1,9 +1,6 @@
 const { InitDatabase } = require('./dbResource/dbInit');
-const { DbAccess, DbPerform } = require('./dbResource/dbLib');
-const { GetCurrentDatabase } = require('./dbResource/dbLib');
-
-//====================================//
-//====================================//
+const { DbAccess, GetCurrentDatabase } = require('./dbResource/dbLib');
+const { offset } = require('../helper/paging');
 
 
 const dbService = (async () => {
@@ -11,14 +8,15 @@ const dbService = (async () => {
     // const dbName = `test`;
     const dbName = `testFull`;
 
+    // Always check if exists on call
     let currentDb = await InitDatabase(dbName);
     console.log(await GetCurrentDatabase(currentDb));
     return {
-
         // === Generic:
 
         async total(tableName) {
-
+            const record = await DbAccess(currentDb, 'one', `SELECT COUNT(*) FROM $1:name`, [tableName]);
+            return parseInt(record.count);
         },
 
         async getAll(tableName) {
@@ -26,34 +24,75 @@ const dbService = (async () => {
             return record;
         },
 
-        async getRange(tableName, start, end) {
-            const record = await DbAccess(currentDb, 'any', `SELECT * FROM $1:name`, [tableName]);
+        async getRange(tableName, perPage, pageNum) {
+            const query = ` SELECT * FROM $1:name ORDER BY id ASC LIMIT $2:value OFFSET $3:value`;
+            const offsetRec = offset(perPage, pageNum);
+            const record = await DbAccess(currentDb, 'any', query, [tableName, perPage, offsetRec]);
             return record;
         },
 
         async getDetail(tableName, id) {
-            const record = await DbAccess(currentDb, 'any', `SELECT * FROM $1:name`, [tableName]);
+            // Keep the id at general type (not value, raw or name)
+            const record = await DbAccess(currentDb, 'one', `SELECT * FROM $1:name WHERE id = $2`, [tableName]);
             return record;
         },
+
+        // === INTRO:
+
 
         // === Movie:
 
         async getActorList(movieId) {
-            const query1 = `SELECT name_id FROM movie_name_actor WHERE movie_id = $1:value`;
-            const query2 = `SELECT * FROM name WHERE name_id = $1:value`;
-            const res = await DbPerform(currentDb, async function () {
-                currentDb.task(async t => {
-                    return t.any(query1, [movieId])
-                        .then(rec => {
-                            if (rec) {
-                                return t.one(query2, rec.name_id);
-                            }
-                            return [];
-                        });
-                });
-            });
+            const query = `
+            SELECT *
+            FROM movie_name_actor INNER JOIN name ON name.id = movie_name_actor.name_id
+            WHERE movie_id = \'$1:value\'
+            `;
+            const res = DbAccess(currentDb, 'any', query, [movieId]);
             return res;
-        }
+        },
+
+        async getDirectorList(movieId) {
+            const query = `
+            SELECT *
+            FROM movie_name_director INNER JOIN name ON name.id = movie_name_director.name_id
+            WHERE movie_id = \'$1:value\'
+            `;
+            const res = DbAccess(currentDb, 'any', query, [movieId]);
+            return res;
+        },
+
+        async getWriterList(movieId) {
+            const query = `
+            SELECT *
+            FROM movie_name_writer INNER JOIN name ON name.id = movie_name_writer.name_id
+            WHERE movie_id = \'$1:value\'
+            `;
+            const res = DbAccess(currentDb, 'any', query, [movieId]);
+            return res;
+        },
+
+        async getSimilarList(movieId) {
+            const query = `
+            SELECT *
+            FROM movie_movie_similar INNER JOIN movie ON movie.id = movie_movie_similar.movie_id_similar
+            WHERE movie_id = \'$1:value\'
+            `;
+            const res = DbAccess(currentDb, 'any', query, [movieId]);
+            return res;
+        },
+
+        // Need paging
+        async getReviewList(movieId, perPage, pageNum) {
+            const query = `
+            SELECT * FROM review WHERE movie_id = \'$1:value\
+            ORDER BY id ASC LIMIT $2:value OFFSET $3:value'
+            `;
+            const offsetRec = offset(perPage, pageNum);
+            const res = DbAccess(currentDb, 'any', query, [movieId, perPage, offsetRec]);
+            return res;
+        },
+
 
 
 
