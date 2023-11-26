@@ -1,3 +1,6 @@
+import myNormalcard from './subsub/normalcard.js';
+import myDeleteablecard from './subsub/deleteablecard.js';
+
 export default {
     data() {
         return {
@@ -6,14 +9,21 @@ export default {
     },
 
     props: {
+        cardUsed: "myNormalcard",
         listDataProp: {
             type: Array,
             default: [],
         }
     },
 
+    components: {
+        myNormalcard,
+        myDeleteablecard,
+    },
+
     emits: {
         requestDetailMovie: null,
+        requestDeleteFav: null,
     },
 
     // Copy once
@@ -27,17 +37,11 @@ export default {
             <div class="row row-cols-2 row-cols-md-3 g-2">
                 <template v-for="data in listDataProp">
                     <div class="col">
-                        <div class="card text-center h-100"
-                            role="button"
-                            @click="$emit('requestDetailMovie', data.id)">
-                            <img :src="data.image"
-                                class="card-img-top"
-                                alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">{{data.title}}</h5>
-                                <p class="card-text">({{data.year}})</p>
-                            </div>
-                        </div>
+                        <component :is="cardUsed"
+                            :data="data"
+                            @requestDetailMovie="id => this.$emit('requestDetailMovie', id)"
+                            @requestDeleteFav="id => this.$emit('requestDeleteFav', id)">
+                        </component>
                     </div>
                 </template>
             </div>

@@ -10,6 +10,7 @@ export default {
         return {
             displayPageMovie: [],
             displayPageName: [],
+            cardUsed: 'myNormalcard',
         }
     },
 
@@ -55,7 +56,8 @@ export default {
             <div class="row">
                 <div class="col col-md-7">
                     <p class="fw-medium fs-2 text-decoration-underline text-primary-emphasis">Phim:</p>
-                    <myCardview :listDataProp="displayPageMovie"
+                    <myCardview :cardUsed="cardUsed"
+                        :listDataProp="displayPageMovie"
                         @requestDetailMovie="id => this.$emit('requestDetailMovie', id)"/>
                     <myPaginationbar class="mt-5"
                         :totalPage="totalPageMovie"

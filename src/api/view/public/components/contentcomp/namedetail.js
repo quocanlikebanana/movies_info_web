@@ -32,6 +32,15 @@ export default {
                     </div>
                     <div class="col d-flex flex-column p-3">
                         <p class="text-uppercase fs-2 fw-bold mb-1">{{nameDetail.name}}</p>
+                        <p class="fw-bold">Vai trò:
+                            <span class="fw-normal">{{nameDetail.role}}</span>
+                        </p>
+                        <p class="fw-bold">Năm sinh:
+                            <span class="fw-normal">{{nameDetail.birth_date}}</span>
+                        </p>
+                        <p class="fw-bold">Năm mất:
+                            <span class="fw-normal">{{nameDetail.death_date}}</span>
+                        </p>
                         <p class="fw-bold">
                             Tiểu sử:
                             <span class="fw-normal"
@@ -43,6 +52,12 @@ export default {
                                 Not found.
                             </span>
                         </p>
+                        <p class="fw-bold">Giải thưởng:
+                            <span class="fw-normal">{{nameDetail.plot}}</span>
+                        </p>
+                        <p class="fw-bold">Chiều cao:
+                            <span class="fw-normal">{{nameDetail.height}}</span>
+                        </p>
                     </div>
                 </div>
 
@@ -50,7 +65,8 @@ export default {
 
                 <!-- List movie Cardview -->
                 <myCarousel :listDataProp="nameDetail.thumbnail.cast_list"
-                    :myId="castMoviesCrs"/>
+                    :myId="castMoviesCrs"
+                    @requestDetailMovie = "id => this.$emit('requestDetailMovie', id)"/>
 
             </div>
         </div>

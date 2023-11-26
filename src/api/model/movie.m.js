@@ -11,15 +11,15 @@ class Movie {
         this.companies = movieRecord.companies;
         this.countries = movieRecord.countries;
         this.full_title = movieRecord.full_title;
-        this.genre_list = new Array(JSON.parse(movieRecord.genre_list));
+        this.genre_list = JSON.parse(movieRecord.genre_list);
         this.im_db_rating = movieRecord.im_db_rating;
         this.image = movieRecord.image;
-        this.images = new Array(JSON.parse(movieRecord.images));
+        this.images = JSON.parse(movieRecord.images);
         this.languages = movieRecord.languages;
         this.original_title = movieRecord.original_title;
         this.plot = movieRecord.plot;
         this.plot_full = movieRecord.plot_full;
-        this.posters = new Array(JSON.parse(movieRecord.posters));
+        this.posters = JSON.parse(movieRecord.posters);
         this.release_date = movieRecord.release_date;
         this.runtime_str = movieRecord.runtime_str;
         this.title = movieRecord.title;
@@ -30,7 +30,7 @@ class Movie {
             similar_list: [],
             writer_list: [],
         };
-        this.total_review = 0;
+        this.total_review_page = 0;
     }
 
     static async getAll() {

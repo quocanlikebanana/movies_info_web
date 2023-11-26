@@ -57,7 +57,11 @@ export default {
                     },
                 };
             } else if (this.currentView === 'myNamedetail') {
-
+                return {
+                    requestDetailMovie: id => {
+                        this.$emit('requestDetailMovie', id)
+                    },
+                }
             } else if (this.currentView === 'myMoviedetail') {
                 return {
                     requestNameDetail: id => {

@@ -5,7 +5,12 @@ export default {
     data() {
         return {
             movie: null,
+            displayReview: [],
         }
+    },
+
+    mounted() {
+        this.displayReview = this.movieReviewList;
     },
 
     components: {
@@ -31,13 +36,13 @@ export default {
             return this.movieDetail.id;
         },
         totalReviewPage() {
-            return this.movieDetail.total_review;
+            return this.movieDetail.total_review_page;
         },
     },
 
     methods: {
         async updateReviewPage(pageNum) {
-            this.movieReviewList = await fetch.getPageMovieReview(this.getMovieId, pageNum);
+            this.displayReview = await fetch.getPageMovieReview(this.getMovieId, pageNum);
         },
     },
 
@@ -53,7 +58,21 @@ export default {
                     </div>
                     <div class="col d-flex flex-column p-3">
                         <p class="text-uppercase fs-2 fw-bold mb-1">{{movieDetail.title}}</p>
-                        <p class="fst-italic mb-3">{{movieDetail.year}}</p>
+                        <p class="fst-italic mt-1 mb-5">{{movieDetail.year}}</p>
+                        <p class="fw-bold">Độ dài:
+                            <span class="fw-normal">{{movieDetail.runtime_str}}</span>
+                        </p>
+                        <p class="fw-bold">Ngày phát hành:
+                            <span class="fw-normal">{{movieDetail.release_date}}</span>
+                        </p>
+                        <p class="fw-bold">Điểm xếp hạng:
+                            <span class="fw-normal">{{movieDetail.im_db_rating}}</span>
+                        </p>
+                        <p class="fw-bold">Thể loại:
+                            <template v-for="gerne in movieDetail.genre_list">
+                                <span class="fw-normal">{{gerne}}</span>&nbsp
+                            </template>
+                        </p>
                         <p class="fw-bold">Biên kịch:
                             <template v-for="name in movieDetail.thumbnail.writer_list">
                                 <a href="#/"
@@ -81,6 +100,12 @@ export default {
                         <p class="fw-bold">Tóm tắt phim:
                             <span class="fw-normal">{{movieDetail.plot}}</span>
                         </p>
+                        <div class="mt-5 algin-self-end">
+                            <button class="btn btn-danger"
+                                @click="$emit('addToFav', movieDetail.id)">
+                                <span><i class="fa fa-heart"></i> Favorite</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -89,7 +114,7 @@ export default {
                 <p class="fw-bold text-primary text-decoration-underline"
                     style="font-size: 1.5em;">Reviews:</p>
                 <div class="row row-cols-1 d-flex flex-column p-2 gy-4">
-                    <template v-for="rev in movieReviewList">
+                    <template v-for="rev in displayReview">
                         <div class="border border-2 border-primary rounded-2 d-block p-3">
                             <div class="d-flex">
                                 <p class="fw-bold fs-2 my-0">{{rev.title}}</p>

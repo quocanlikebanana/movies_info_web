@@ -13,7 +13,11 @@ class Fav {
 
     static async getByPage(pageNum) {
         const result = await (await dbService).getPageFavMovie(perPage.fav, pageNum);
-        return result;
+        const totalPage = Math.ceil((await (await dbService).total('movie_fav')) / perPage.fav);
+        return {
+            data: result,
+            total_page: totalPage
+        };
     }
 
     static async insert(movieId) {

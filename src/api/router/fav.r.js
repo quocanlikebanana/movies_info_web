@@ -6,6 +6,7 @@ const { Fav } = require('../model/fav.m');
 router.get('/:pageNum', async (req, res, next) => {
     const pageNum = req.params.pageNum;
     const result = await Fav.getByPage(pageNum);
+    // data, total_page
     res.json(result);
 });
 
