@@ -2,10 +2,10 @@
   "name": "universal",
   "version": "1.0.0",
   "description": "package file for multiple projects",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/npserver.js"
+    "start": "nodemon src/server.js"
   },
   "author": "21120190",
   "license": "ISC",

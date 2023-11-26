@@ -1,4 +1,4 @@
-const { PersonManager } = require('../model/person.m');
+const { PersonManager } = require('../model/movie.m');
 
 
 module.exports = {

@@ -1,8 +1,7 @@
-const { fsPromise } = require('../../config/libs');
+const { fsPromise } = require('./src/config/lib');
 
 module.exports = {
-    ext: 'html',
-    fn: async function (path, options, callback) {
+    engineFunction: async function (path, options, callback) {
         const fileContent = await fsPromise.readFile(path, { encoding: 'utf-8' });
         let content = fileContent;
         let engineOptions = options['options'];

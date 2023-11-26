@@ -1,5 +1,4 @@
-import { SimpleMovie } from '../../script.js'
-import myCarouselslide from './contentcomponents/carouselslide.js'
+import myCarouselslide from './sub/carouselslide.js'
 
 export default {
     created() {

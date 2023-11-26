@@ -14,7 +14,7 @@ function toSimpleMovie(movie) {
 }
 
 function currencyToNumber(currency) {
-    const str = currency.replace(/[$,]+/g, "");
+    const str = currency.replace(/[$,]+/g, '');
     return Number(str);
 }
 

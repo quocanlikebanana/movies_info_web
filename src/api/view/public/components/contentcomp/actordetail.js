@@ -1,4 +1,4 @@
-import myListmovie from "./contentcomponents/cardview.js"
+import myListmovie from "./sub/cardview.js"
 
 export default {
     data() {

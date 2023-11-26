@@ -7,10 +7,16 @@ export default {
 
     template: /* html */
         `
-        <nav class="navbar navbar-expand-lg rounded">
+        <nav class="navbar navbar-expand-lg rounded bg-primary-subtle border border-2 border-info-subtle">
             <div class="container-fluid">
                 <button class="navbar-brand mb-0 h1 border-0 bg-transparent"
-                        @click="$emit('goHome')">Home</button>
+                        @click="$emit('goHome')"><i class="fa fa-home"></i></button>
+                <div class="my-auto mx-auto flex-fill d-flex justify-content-center">
+                    <button class="navbar-brand border-0 bg-transparent text-light-emphasis"
+                        @click="$emit('goHome')">
+                        21190
+                    </button>
+                </div>
                 <button class="navbar-toggler"
                         type="button"
                         data-bs-toggle="collapse"
@@ -20,7 +26,7 @@ export default {
                         aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse"
+                <div class="collapse navbar-collapse flex-grow-0"
                      id="navbarSupportedContent">
                     <div class="d-flex ms-auto mb-2 mt-2"
                          role="search">
@@ -28,7 +34,7 @@ export default {
                                type="search"
                                placeholder="Search"
                                aria-label="Search">
-                        <button class="btn btn-outline-success">
+                        <button class="btn btn-outline-success border border-2 border-success-subtle">
                             Search
                         </button>
                     </div>

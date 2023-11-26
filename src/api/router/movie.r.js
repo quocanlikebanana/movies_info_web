@@ -1,9 +1,10 @@
-const { express } = require('../../config/libs');
+const { express } = require('../../config/lib');
 const router = express.Router();
-const control = require('../controller/person.c');
 
+router.get('/detail/:movieId', (req, res, next) => {
+    const id = req.params.movieId;
 
-router.get('/page', control.getPage);
+});
 
 router.get('/search', control.searchPage);
 

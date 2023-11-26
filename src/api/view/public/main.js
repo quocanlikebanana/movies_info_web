@@ -1,11 +1,10 @@
 import myHeader from './components/header.js'
 import myNavbar from './components/navbar.js'
-import myContent from './component/content.js'
-import myFooter from './component/footer.js'
+import myContent from './components/content.js'
+import myFooter from './components/footer.js'
 
 import { computed } from 'vue';
 
-// import { fetch } from '../../../../../Web/Test/2/BTCN2/DBProvider.js'
 
 export default {
     data() {
@@ -69,16 +68,9 @@ export default {
             this.top15Popular = (await fetch(url[1])).items;
             this.top15Rating = (await fetch(url[2])).items;
             await new Promise(r => setTimeout(r, 5000));
-            console.log('done get myIntro data');
-
-            console.log("before changing to myIntro");
             this.currentContentView = 'myIntro';
-
             await new Promise(r => setTimeout(r, 1000));
-            console.log("after changing to myIntro");
         },
-
-
 
         async requestDetailMovieHandler(id) {
             this.currentContentView = 'myLoadingscreen';
