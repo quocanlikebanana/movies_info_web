@@ -13,10 +13,25 @@ class Name {
         this.name = nameRecord.name;
         this.role = nameRecord.role;
         this.summary = nameRecord.summary;
+        this.thumbnail = {
+            cast_list: [],
+        };
     }
 
     static async getDetail(id) {
-        return new Name((await dbService).getDetail('name', id));
+        const res = new Name(await (await dbService).getDetail('name', id));
+        res.thumbnail.cast_list = (await (await dbService).getCastList(id)).map(m => {
+            return {
+                id: m.id,
+                title: m.title,
+                image: m.image,
+            }
+        });
+    }
+
+    static async search(key) {
+        const res = (await (await dbService).searchName(key)).map(r => new Movie(r));
+        return res;
     }
 }
 

@@ -11,10 +11,6 @@ class Review {
         this.username = reviewRecord.username;
         this.warning_spoilers = reviewRecord.warning_spoilers;
     }
-
-    // static async getDetail(id) {
-    //     return new Review((await dbService).getDetail('review', id));
-    // }
 }
 
 module.exports = { Review };

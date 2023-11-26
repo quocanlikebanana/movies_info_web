@@ -18,6 +18,21 @@ app.get('/', (req, res, next) => {
     res.render('index', {});
 });
 
+// Distribute routers
+
+const { router: introRouter } = require('./api/router/intro.r');
+const { router: movieRouter } = require('./api/router/movie.r');
+const { router: favRouter } = require('./api/router/fav.r');
+const { router: nameRouter } = require('./api/router/name.r');
+
+app.get('/intro', introRouter);
+
+app.get('/movie', movieRouter);
+
+app.get('/fav', favRouter);
+
+app.get('/name', nameRouter);
+
 
 // For render error purpose (on fetch request)
 app.get('/error', (req, res, next) => {
@@ -27,14 +42,7 @@ app.get('/error', (req, res, next) => {
 // ==================================
 
 app.listen(port, hostName, async () => {
-    try {
-        // await DatabaseManager.loadData();
-    } catch (err) {
-        // throw err;
-        // console.log(err);
-    } finally {
-        console.log(`Server is on: http://${hostName}:${port}`);
-    }
+    console.log(`Server is on: http://${hostName}:${port}`);
 });
 
 // ==================================

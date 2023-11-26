@@ -1,5 +1,5 @@
 const { InitDatabase } = require('./dbResource/dbInit');
-const { DbAccess, GetCurrentDatabase } = require('./dbResource/dbLib');
+const { DbAccess, GetCurrentDatabase, pgp } = require('./dbResource/dbLib');
 const { offset } = require('../helper/paging');
 
 
@@ -40,7 +40,7 @@ const dbService = (async () => {
         // === INTRO:
 
 
-        // === Movie:
+        // === MOVIE:
 
         async getActorList(movieId) {
             const query = `
@@ -48,7 +48,7 @@ const dbService = (async () => {
             FROM movie_name_actor INNER JOIN name ON name.id = movie_name_actor.name_id
             WHERE movie_id = \'$1:value\'
             `;
-            const res = DbAccess(currentDb, 'any', query, [movieId]);
+            const res = await DbAccess(currentDb, 'any', query, [movieId]);
             return res;
         },
 
@@ -58,7 +58,7 @@ const dbService = (async () => {
             FROM movie_name_director INNER JOIN name ON name.id = movie_name_director.name_id
             WHERE movie_id = \'$1:value\'
             `;
-            const res = DbAccess(currentDb, 'any', query, [movieId]);
+            const res = await DbAccess(currentDb, 'any', query, [movieId]);
             return res;
         },
 
@@ -68,7 +68,7 @@ const dbService = (async () => {
             FROM movie_name_writer INNER JOIN name ON name.id = movie_name_writer.name_id
             WHERE movie_id = \'$1:value\'
             `;
-            const res = DbAccess(currentDb, 'any', query, [movieId]);
+            const res = await DbAccess(currentDb, 'any', query, [movieId]);
             return res;
         },
 
@@ -78,7 +78,7 @@ const dbService = (async () => {
             FROM movie_movie_similar INNER JOIN movie ON movie.id = movie_movie_similar.movie_id_similar
             WHERE movie_id = \'$1:value\'
             `;
-            const res = DbAccess(currentDb, 'any', query, [movieId]);
+            const res = await DbAccess(currentDb, 'any', query, [movieId]);
             return res;
         },
 
@@ -86,15 +86,84 @@ const dbService = (async () => {
         async getReviewList(movieId, perPage, pageNum) {
             const query = `
             SELECT * FROM review WHERE movie_id = \'$1:value\
-            ORDER BY id ASC LIMIT $2:value OFFSET $3:value'
+            ORDER BY id ASC LIMIT $2:value OFFSET $3:value
             `;
             const offsetRec = offset(perPage, pageNum);
-            const res = DbAccess(currentDb, 'any', query, [movieId, perPage, offsetRec]);
+            const res = await DbAccess(currentDb, 'any', query, [movieId, perPage, offsetRec]);
+
+            const queryTotal = `
+            SELECT COUNT(*) FROM review WHERE movie_id = \'$1:value\
+            `;
+            const resTotal = await DbAccess(currentDb, 'any', query, [movieId]);
+            return {
+                res: res,
+                total: resTotal,
+            };
+        },
+
+        // Search by name and gerne (paging for model)
+        async searchMovie(key) {
+            const queryTitle = `SELECT * FROM movie WHERE title ILIKE \'%$1#%\'`;
+            const resTitle = await DbAccess(currentDb, 'any', queryTitle, [key]);
+            const queryGerne = `SELECT * FROM movie`;
+            const resGerne = (await DbAccess(currentDb, 'any', queryGerne));
+            resGerne = resGerne.filter(res => {
+                const gernes = JSON.parse(res.genre_list);
+                return gernes.includes(key);
+            });
+            const res = resTitle.concat(resGerne);
             return res;
         },
 
+        // === FAV MOVIE:
 
+        async getPageFavMovie(perPage, pageNum) {
+            const query = `
+            SELECT * FROM movie_fav INNER JOIN movie ON movie_fav.movie_id = movie.id
+            ORDER BY movie_id ASC LIMIT $1:value OFFSET $2:value
+            `;
+            const offsetRec = offset(perPage, pageNum);
+            const res = await DbAccess(currentDb, 'any', query, [perPage, offsetRec]);
+            return res;
+        },
 
+        async getAllFavMovie() {
+            const query = `
+            SELECT * FROM movie_fav INNER JOIN movie ON movie_fav.movie_id = movie.id
+            `;
+            const res = await DbAccess(currentDb, 'any', query);
+            return res;
+        },
+
+        async insertFavMovie(movieId) {
+            const query = pgp.helpers.insert({ movie_id: movieId }, null, 'movie_fav') + ' RETURNING id';
+            const result = await DbAccess(currentDb, 'one', query);
+            return result.id;
+        },
+
+        async deleteFavMovie(movieId) {
+            const query = `DELETE FROM movie_fav WHERE id = $1:value RETURNING id`;
+            const result = await DbAccess(currentDb, 'one', query);
+            return result.id;
+        },
+
+        // === NAME:
+
+        async getCastList(nameId) {
+            const query = `
+            SELECT *
+            FROM name_movie_cast INNER JOIN movie ON name_movie_cast.movie_id = movie.id
+            WHERE name_id = \'$1:value\'
+            `;
+            const res = await DbAccess(currentDb, 'any', query, [nameId]);
+            return res;
+        },
+
+        async searchName(key) {
+            const query = `SELECT * FROM name WHERE name ILIKE \'%$1:value%\'`;
+            const res = await DbAccess(currentDb, 'any', query, [key]);
+            return res;
+        },
 
     };
 })();

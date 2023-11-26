@@ -28,23 +28,31 @@ async function getIntroData() {
 
 // === MOVIE:
 
+// Also gives total page
 async function getDetailMovie(movieId) {
     const url = `${serverAddress}/movie/detail/${movieId}`;
+    return await fetchGet(url);
+}
+
+// Must have AJAX
+async function getPageMovieReview(movieId, pageNum) {
+    const url = `${serverAddress}/movie/detail/review/${movieId}/${pageNum}`;
     return await fetchGet(url);
 }
 
 // No need AJAX for paging
 // search key: movie name, movie gerne
 async function searchMovie(searchKey, perPage) {
-    const url = `${serverAddress}/movie/search/${searchKey}/${perPage}`;
+    const url = `${serverAddress}/movie/search/${searchKey}`;
     // Array of array of movie, with length of perPage
     return await fetchGet(url);
 }
 
+
 // === FAV:
 
-async function getPageFavMovie(perPage, pageNum) {
-    const url = `${serverAddress}/fav/${perPage}/${pageNum}`;
+async function getPageFavMovie(pageNum) {
+    const url = `${serverAddress}/fav/${pageNum}`;
     return await fetchGet(url);
 }
 
@@ -65,18 +73,9 @@ async function getDetailName(nameId) {
     return await fetchGet(url);
 }
 
-async function searchName(searchKey, perPage) {
-    const url = `${serverAddress}/name/search/${searchKey}/${perPage}`;
+async function searchName(searchKey) {
+    const url = `${serverAddress}/name/search/${searchKey}`;
     // Array (of array of name) with length of perPage
-    return await fetchGet(url);
-}
-
-// === REVIEW:
-
-// Must have AJAX
-// Gives total page for first get
-async function getPageMovieReview(movieId, perPage, pageNum) {
-    const url = `${serverAddress}/review/${movieId}/${perPage}/${pageNum}`;
     return await fetchGet(url);
 }
 
