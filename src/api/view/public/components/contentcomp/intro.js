@@ -1,14 +1,6 @@
 import myCarouselslide from './sub/carouselslide.js'
 
 export default {
-    created() {
-        console.log("intro slide created");
-    },
-
-    mounted() {
-        console.log("intro slide mounted");
-    },
-
     data() {
         return {
 
@@ -16,9 +8,9 @@ export default {
     },
 
     inject: [
-        'top5Gross',
-        'top15Popular',
-        'top15Rating',
+        'top5Rating',
+        'top30Boxoffice',
+        'top30Mostfav',
     ],
 
     components: {
@@ -28,7 +20,6 @@ export default {
     emits: {
         requestDetailMovie: null,
     },
-
 
     methods: {
         singCsrImgClick(id) {
@@ -44,7 +35,7 @@ export default {
                 container-fluid my-3 carousel-dark"
                 data-bs-ride="carousel">
             <div class="carousel-inner">
-                <template v-for="(movie, index) in top5Gross">
+                <template v-for="(movie, index) in top5Rating">
                     <div class="carousel-item"
                         :class="{active: index === 1}"
                         data-bs-interval="3000">
@@ -76,7 +67,7 @@ export default {
                 <span class="visually-hidden">Next</span>
             </button>
             <div class="carousel-indicators">
-                <template v-for="(movie, n) in top5Gross">
+                <template v-for="(movie, n) in top5Rating">
                     <button type="button"
                         data-bs-target="#singCrsNewest"
                         :data-bs-slide-to="n"
@@ -90,14 +81,14 @@ export default {
         <!-- Most popular -->
         <p class="my-2">Most Popular:</p>
         <!-- List movie carousel -->
-        <myCarouselslide :listMoviesProp="top15Popular"
+        <myCarouselslide :listDataProp="top30Boxoffice"
             :myId="'popularMulCrs'"
             @requestDetailMovie="id => singCsrImgClick(id)"/>
 
         <!-- Top Rating -->
         <p class="my-2">Top Rating:</p>
         <!-- List movie carousel -->
-        <myCarouselslide :listMoviesProp="top15Rating"
+        <myCarouselslide :listDataProp="top30Mostfav"
             :myId="'ratingMulCrs'"
             @requestDetailMovie="id => singCsrImgClick(id)"/>
         `

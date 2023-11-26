@@ -27,10 +27,11 @@ class Name {
                 image: m.image,
             }
         });
+        return res;
     }
 
     static async search(key) {
-        const res = (await (await dbService).searchName(key)).map(r => new Movie(r));
+        const res = (await (await dbService).searchName(key));
         return res;
     }
 }

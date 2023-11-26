@@ -1,8 +1,14 @@
 export default {
     data() {
         return {
-
+            searchString: "",
         }
+    },
+
+    emits: {
+        goSearch: null,
+        goHome: null,
+        goFav: null,
     },
 
     template: /* html */
@@ -13,7 +19,7 @@ export default {
                         @click="$emit('goHome')"><i class="fa fa-home"></i></button>
                 <div class="my-auto mx-auto flex-fill d-flex justify-content-center">
                     <button class="navbar-brand border-0 bg-transparent text-light-emphasis"
-                        @click="$emit('goHome')">
+                        @click="$emit('goFav')">
                         21190
                     </button>
                 </div>
@@ -33,8 +39,10 @@ export default {
                         <input class="form-control me-2"
                                type="search"
                                placeholder="Search"
-                               aria-label="Search">
-                        <button class="btn btn-outline-success border border-2 border-success-subtle">
+                               aria-label="Search"
+                               v-model="searchString">
+                        <button class="btn btn-outline-success border border-2 border-success-subtle"
+                            @click="$emit('goSearch', searchString)">
                             Search
                         </button>
                     </div>

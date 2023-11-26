@@ -1,4 +1,4 @@
-import myActordetail from './contentcomp/actordetail.js'
+import myNamedetail from './contentcomp/namedetail.js'
 import myIntro from './contentcomp/intro.js'
 import myMoviedetail from './contentcomp/moviedetail.js'
 import mySearchresult from './contentcomp/searchresult.js'
@@ -13,7 +13,7 @@ export default {
     components: {
         myIntro,
         mySearchresult,
-        myActordetail,
+        myNamedetail,
         myMoviedetail,
         myLoadingscreen,
     },
@@ -31,7 +31,7 @@ export default {
 
             } else if (this.currentView === 'mySearchresult') {
 
-            } else if (this.currentView === 'myActordetail') {
+            } else if (this.currentView === 'myNamedetail') {
 
             } else if (this.currentView === 'myMoviedetail') {
 
@@ -48,13 +48,20 @@ export default {
                     },
                 };
             } else if (this.currentView === 'mySearchresult') {
-
-            } else if (this.currentView === 'myActordetail') {
+                return {
+                    requestDetailMovie: id => {
+                        this.$emit('requestDetailMovie', id)
+                    },
+                    requestNameDetail: id => {
+                        this.$emit('requestNameDetail', id)
+                    },
+                };
+            } else if (this.currentView === 'myNamedetail') {
 
             } else if (this.currentView === 'myMoviedetail') {
                 return {
-                    requestActorDetail: id => {
-                        this.$emit('requestActorDetail', id)
+                    requestNameDetail: id => {
+                        this.$emit('requestNameDetail', id)
                     }
                 }
             } else if (this.currentView === 'myLoadingscreen') {

@@ -19,65 +19,73 @@ async function fetchGet(url) {
     }
 }
 
-// === INTRO:
+export default {
 
-async function getIntroData() {
-    const url = `${serverAddress}/intro`;
-    return await fetchGet(url);
+    // === INTRO:
+
+    async getIntroData() {
+        const url = `${serverAddress}/intro`;
+        const res = await fetchGet(url);
+        return res;
+    },
+
+    // === MOVIE:
+
+    // Also gives total page
+    async getDetailMovie(movieId) {
+        const url = `${serverAddress}/movie/detail/${movieId}`;
+        const res = await fetchGet(url);
+        return res;
+    },
+
+    // Must have AJAX
+    async getPageMovieReview(movieId, pageNum) {
+        const url = `${serverAddress}/movie/detail/review/${movieId}/${pageNum}`;
+        const res = await fetchGet(url);
+        return res;
+    },
+
+    // No need AJAX for paging
+    // search key: movie name, movie gerne
+    async searchMovie(searchKey, perPage) {
+        const url = `${serverAddress}/movie/search/${searchKey}`;
+        // Array of array of movie, with length of perPage
+        const res = await fetchGet(url);
+        return res;
+    },
+
+    // === FAV:
+
+    async getPageFavMovie(pageNum) {
+        const url = `${serverAddress}/fav/${pageNum}`;
+        const res = await fetchGet(url);
+        return res;
+    },
+
+    async insertIntoFavMovie(movieId) {
+        const url = `${serverAddress}/fav/insert/${movieId}`;
+        const res = await fetchGet(url);
+        return res;
+    },
+
+    async deleteFromFavMovie(movieId) {
+        const url = `${serverAddress}/fav/delete/${movieId}`;
+        const res = await fetchGet(url);
+        return res;
+    },
+
+    // === NAME:
+
+    async getDetailName(nameId) {
+        const url = `${serverAddress}/name/detail/${nameId}`;
+        const res = await fetchGet(url);
+        return res;
+    },
+
+    async searchName(searchKey) {
+        const url = `${serverAddress}/name/search/${searchKey}`;
+        // Array (of array of name) with length of perPage
+        const res = await fetchGet(url);
+        return res;
+    },
 }
-
-// === MOVIE:
-
-// Also gives total page
-async function getDetailMovie(movieId) {
-    const url = `${serverAddress}/movie/detail/${movieId}`;
-    return await fetchGet(url);
-}
-
-// Must have AJAX
-async function getPageMovieReview(movieId, pageNum) {
-    const url = `${serverAddress}/movie/detail/review/${movieId}/${pageNum}`;
-    return await fetchGet(url);
-}
-
-// No need AJAX for paging
-// search key: movie name, movie gerne
-async function searchMovie(searchKey, perPage) {
-    const url = `${serverAddress}/movie/search/${searchKey}`;
-    // Array of array of movie, with length of perPage
-    return await fetchGet(url);
-}
-
-
-// === FAV:
-
-async function getPageFavMovie(pageNum) {
-    const url = `${serverAddress}/fav/${pageNum}`;
-    return await fetchGet(url);
-}
-
-async function insertIntoFavMovie(movieId) {
-    const url = `${serverAddress}/fav/insert/${movieId}`;
-    return await fetchGet(url);
-}
-
-async function deleteFromFavMovie(movieId) {
-    const url = `${serverAddress}/fav/delete/${movieId}`;
-    return await fetchGet(url);
-}
-
-// === NAME:
-
-async function getDetailName(nameId) {
-    const url = `${serverAddress}/name/detail/${nameId}`;
-    return await fetchGet(url);
-}
-
-async function searchName(searchKey) {
-    const url = `${serverAddress}/name/search/${searchKey}`;
-    // Array (of array of name) with length of perPage
-    return await fetchGet(url);
-}
-
-
-

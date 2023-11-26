@@ -2,7 +2,7 @@ const { fsPromise, path } = require('../../../config/lib');
 const { pgp, connection, DbAccess, baseDb, ObjectInsert } = require('./dbLib');
 
 async function ReadDataTo(db) {
-    const fileContent = JSON.parse(await fsPromise.readFile(path.join(__dirname, '../../../data/data.json'), { encoding: 'utf-8' }));
+    const fileContent = JSON.parse(await fsPromise.readFile(path.join(__dirname, '../../../../data/data.json'), { encoding: 'utf-8' }));
     const { camelToSnakeCase } = require('../../helper/string-convert');
 
     const moviesInsert = [];

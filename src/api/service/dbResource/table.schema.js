@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS public.name_movie_cast (
 );
 
 CREATE TABLE IF NOT EXISTS public.movie_fav (
-    movie_id CHAR(15) PRIMARY KEY,
+    movie_id CHAR(15) PRIMARY KEY
 );
 
 `

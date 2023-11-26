@@ -4,6 +4,7 @@ import myContent from './components/content.js'
 import myFooter from './components/footer.js'
 
 import { computed } from 'vue';
+import fetchManager from './fetch.js';
 
 
 export default {
@@ -11,17 +12,18 @@ export default {
         return {
             currentContentView: 'myLoadingscreen',
 
-            top5Gross: [],
-            top15Popular: [],
-            top15Rating: [],
+            top5Rating: [],
+            top30Boxoffice: [],
+            top30Mostfav: [],
 
-            searchData: null,
+            searchMovieResults: [],
+            searchNameResults: [],
 
-            actorDetailData: null,
-            actorDetailMovies: null,
+            nameDetail: null,
+            nameDetailMovies: null,
 
-            movieDetailData: null,
-            movieDetailReview: null,
+            movieDetail: null,
+            movieReviewList: null,
 
         }
     },
@@ -32,15 +34,18 @@ export default {
 
     provide() {
         return {
-            top5Gross: computed(() => this.top5Gross),
-            top15Popular: computed(() => this.top15Popular),
-            top15Rating: computed(() => this.top15Rating),
+            top5Rating: computed(() => this.top5Rating),
+            top30Boxoffice: computed(() => this.top30Boxoffice),
+            top30Mostfav: computed(() => this.top30Mostfav),
 
-            movieDetailData: computed(() => this.movieDetailData),
-            movieDetailReview: computed(() => this.movieDetailReview),
+            movieDetail: computed(() => this.movieDetail),
+            movieReviewList: computed(() => this.movieReviewList),
 
-            actorDetailData: computed(() => this.actorDetailData),
-            actorDetailMovies: computed(() => this.actorDetailMovies),
+            nameDetail: computed(() => this.nameDetail),
+            nameDetailMovies: computed(() => this.nameDetailMovies),
+
+            searchMovieResults: computed(() => this.searchMovieResults),
+            searchNameResults: computed(() => this.searchNameResults),
         }
     },
 
@@ -59,53 +64,51 @@ export default {
         // Only fixed this screen transition
         async goIntroDuction() {
             this.currentContentView = 'myLoadingscreen';
-            const url = [
-                'get/topboxoffice/?per_page=5&page=1',
-                'get/mostpopular/?per_page=15&page=1',
-                'get/top50/?per_page=15&page=1',
-            ]
-            this.top5Gross = (await fetch(url[0])).items;
-            this.top15Popular = (await fetch(url[1])).items;
-            this.top15Rating = (await fetch(url[2])).items;
-            await new Promise(r => setTimeout(r, 5000));
+            const res = await fetchManager.getIntroData();
+            this.top5Rating = res.top5Rating;
+            this.top30Boxoffice = res.top30Boxoffice;
+            this.top30Mostfav = res.top30Mostfav;
             this.currentContentView = 'myIntro';
-            await new Promise(r => setTimeout(r, 1000));
         },
 
         async requestDetailMovieHandler(id) {
             this.currentContentView = 'myLoadingscreen';
-            const urlMovie = `detail/movie/${id}`;
-            const urlReview = `detail/review/${id}`;
-            this.movieDetailData = await fetch(urlMovie);
-            if (this.movieDetailData.record === null) {
-                alert("Can't find Movie's detail. The movie's probably updating it's info, comeback later for details.");
+            this.movieDetail = await fetchManager.getDetailMovie(id);
+            console.log(this.movieDetail);
+            if (this.movieDetail == null) {
+                alert("Can't find Movie's detail. The movie's probably updating it's info, maybe later ...");
                 this.currentContentView = 'myIntro';
             } else {
-                this.movieDetailReview = await fetch(urlReview);
+                this.movieReviewList = await fetchManager.getPageMovieReview(id, 1);
                 this.currentContentView = 'myMoviedetail';
             }
         },
 
-        async requestActorDetailHandler(id) {
+        async requestNameDetailHandler(id) {
             this.currentContentView = 'myLoadingscreen';
-            const urlActor = `detail/name/${id}`;
-            this.actorDetailData = await fetch(urlActor);
-            if (this.actorDetailData.record === null) {
+            this.nameDetail = await fetchManager.getDetailName(id);
+            console.log(this.nameDetail);
+            if (this.nameDetail == null) {
                 alert("Can't find Actor's detail.");
                 this.currentContentView = 'myIntro';
             } else {
-                const movies = [];
-                for (const castMovie of this.actorDetailData.record.castMovies) {
-                    const movieUrk = `detail/movie/${castMovie.id}`;
-                    const movie = (await fetch(movieUrk)).record;
-                    if (movie !== null) {
-                        movies.push(movie);
-                    }
-                }
-                this.actorDetailMovies = movies;
-                this.currentContentView = 'myActordetail';
+                this.currentContentView = 'myNamedetail';
             }
         },
+
+        async goFav() {
+
+        },
+
+        async searchHandler(key) {
+            this.currentContentView = 'myLoadingscreen';
+            this.searchMovieResults = await fetchManager.searchMovie(key);
+            this.searchNameResults = await fetchManager.searchName(key);
+            this.currentContentView = 'mySearchresult';
+
+        },
+
+
 
     },
 
@@ -118,13 +121,15 @@ export default {
             <myHeader />
 
             <!-- NavBar -->
-            <myNavbar @goHome="goIntroDuction"/>
+            <myNavbar @goHome="goIntroDuction"
+                @goSearch="(key) => searchHandler(key)"
+                @goFav="goFav"/>
 
             <!-- Content -->
             <myContent
                 :currentView="currentContentView"
                 @requestDetailMovie="(id) => requestDetailMovieHandler(id)"
-                @requestActorDetail="(id) => requestActorDetailHandler(id)"/>
+                @requestNameDetail="(id) => requestNameDetailHandler(id)"/>
 
             <!-- Footer -->
             <myFooter />

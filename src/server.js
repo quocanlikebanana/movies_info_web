@@ -25,13 +25,13 @@ const { router: movieRouter } = require('./api/router/movie.r');
 const { router: favRouter } = require('./api/router/fav.r');
 const { router: nameRouter } = require('./api/router/name.r');
 
-app.get('/intro', introRouter);
+app.use('/intro', introRouter);
 
-app.get('/movie', movieRouter);
+app.use('/movie', movieRouter);
 
-app.get('/fav', favRouter);
+app.use('/fav', favRouter);
 
-app.get('/name', nameRouter);
+app.use('/name', nameRouter);
 
 
 // For render error purpose (on fetch request)

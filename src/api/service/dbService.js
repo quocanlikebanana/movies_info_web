@@ -4,9 +4,9 @@ const { offset } = require('../helper/paging');
 
 
 const dbService = (async () => {
-    // const dbName = `db${process.env.INDIVIDUAL_MARK}`;
+    const dbName = `db${process.env.INDIVIDUAL_MARK}`;
     // const dbName = `test`;
-    const dbName = `testFull`;
+    // const dbName = `testFull`;
 
     // Always check if exists on call
     let currentDb = await InitDatabase(dbName);
@@ -33,7 +33,7 @@ const dbService = (async () => {
 
         async getDetail(tableName, id) {
             // Keep the id at general type (not value, raw or name)
-            const record = await DbAccess(currentDb, 'one', `SELECT * FROM $1:name WHERE id = $2`, [tableName]);
+            const record = await DbAccess(currentDb, 'one', `SELECT * FROM $1:name WHERE id = $2`, [tableName, id]);
             return record;
         },
 
@@ -82,23 +82,20 @@ const dbService = (async () => {
             return res;
         },
 
+        async getTotalReview(movieId) {
+            const query = `SELECT COUNT(*) FROM review WHERE movie_id = \'$1:value\'`;
+            const record = await DbAccess(currentDb, 'one', query, [movieId]);
+            return parseInt(record.count);
+        },
+
         // Need paging
         async getReviewList(movieId, perPage, pageNum) {
             const query = `
-            SELECT * FROM review WHERE movie_id = \'$1:value\
-            ORDER BY id ASC LIMIT $2:value OFFSET $3:value
+            SELECT * FROM review WHERE movie_id = $1 ORDER BY id ASC LIMIT $2:value OFFSET $3:value
             `;
             const offsetRec = offset(perPage, pageNum);
             const res = await DbAccess(currentDb, 'any', query, [movieId, perPage, offsetRec]);
-
-            const queryTotal = `
-            SELECT COUNT(*) FROM review WHERE movie_id = \'$1:value\
-            `;
-            const resTotal = await DbAccess(currentDb, 'any', query, [movieId]);
-            return {
-                res: res,
-                total: resTotal,
-            };
+            return res;
         },
 
         // Search by name and gerne (paging for model)
@@ -106,7 +103,7 @@ const dbService = (async () => {
             const queryTitle = `SELECT * FROM movie WHERE title ILIKE \'%$1#%\'`;
             const resTitle = await DbAccess(currentDb, 'any', queryTitle, [key]);
             const queryGerne = `SELECT * FROM movie`;
-            const resGerne = (await DbAccess(currentDb, 'any', queryGerne));
+            let resGerne = (await DbAccess(currentDb, 'any', queryGerne));
             resGerne = resGerne.filter(res => {
                 const gernes = JSON.parse(res.genre_list);
                 return gernes.includes(key);

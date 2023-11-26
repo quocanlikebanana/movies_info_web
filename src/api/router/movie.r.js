@@ -10,12 +10,12 @@ router.get('/detail/:movieId', async (req, res, next) => {
 
 router.get('/detail/review/:movieId/:pageNum', async (req, res, next) => {
     const id = req.params.movieId;
-    const pageNum = req.params.pageNum;
+    const pageNum = parseInt(req.params.pageNum) || 0;
     const result = await Movie.getPageReviewList(id, pageNum);
     res.json(result);
 });
 
-router.get('/search/:key/', async (req, res, next) => {
+router.get('/search/:key', async (req, res, next) => {
     const key = req.params.key;
     const result = await Movie.search(key);
     res.json(result);

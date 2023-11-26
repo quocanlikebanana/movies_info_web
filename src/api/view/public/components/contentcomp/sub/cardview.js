@@ -12,16 +12,13 @@ export default {
         }
     },
 
-    mounted() {
-        this.listData = this.listDataProp;
+    emits: {
+        requestDetailMovie: null,
     },
 
-    watch: {
-        listDataProp: {
-            handler(newLD, oldLD) {
-                console.log("test");
-            }
-        }
+    // Copy once
+    mounted() {
+        this.listData = this.listDataProp;
     },
 
     template: /* html */
@@ -30,7 +27,9 @@ export default {
             <div class="row row-cols-2 row-cols-md-3 g-2">
                 <template v-for="data in listDataProp">
                     <div class="col">
-                        <div class="card text-center h-100">
+                        <div class="card text-center h-100"
+                            role="button"
+                            @click="$emit('requestDetailMovie', data.id)">
                             <img :src="data.image"
                                 class="card-img-top"
                                 alt="...">

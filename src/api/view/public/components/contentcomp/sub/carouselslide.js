@@ -1,13 +1,4 @@
 export default {
-    created() {
-        console.log("carousel slide created");
-    },
-
-    mounted() {
-        console.log("carousel slide mounted");
-        // this.listMovies = this.listMoviesProp;
-    },
-
     data() {
         return {
             numSlide: 0,
@@ -19,7 +10,7 @@ export default {
     },
 
     props: {
-        listMoviesProp: {
+        listDataProp: {
             required: true,
             default: [],
         },
@@ -32,31 +23,16 @@ export default {
     computed: {
         dataSlides() {
             const buffer = [];
-            this.numSlide = Math.ceil(this.listMoviesProp.length / this.numItemPerSlide);
+            this.numSlide = Math.ceil(this.listDataProp.length / this.numItemPerSlide);
             for (let i = 0; i < this.numSlide; i++) {
                 buffer[i] = [];
                 for (let j = 0; j < this.numItemPerSlide; j++) {
-                    buffer[i][j] = this.listMoviesProp[i * this.numItemPerSlide + j];
+                    buffer[i][j] = this.listDataProp[i * this.numItemPerSlide + j];
                 }
             }
             return buffer;
         },
     },
-
-    // watch: {
-    //     listMoviesProp: {
-    //         handler(newLM, oldLM) {
-    //             this.numSlide = Math.ceil(this.listMoviesProp.length / this.numItemPerSlide);
-    //             for (let i = 0; i < this.numSlide; i++) {
-    //                 this.dataSlides[i] = [];
-    //                 for (let j = 0; j < this.numItemPerSlide; j++) {
-    //                     this.dataSlides[i][j] = this.listMoviesProp[i * this.numItemPerSlide + j];
-    //                 }
-    //             }
-    //         },
-    //         deep: true,
-    //     }
-    // },
 
     template: /* html */
         `

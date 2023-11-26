@@ -30,10 +30,7 @@ class Movie {
             similar_list: [],
             writer_list: [],
         };
-        this.review_list = {
-            res: [],
-            total: 0,
-        };
+        this.total_review = 0;
     }
 
     static async getAll() {
@@ -43,7 +40,7 @@ class Movie {
     }
 
     static async getDetail(id) {
-        const res = new Movie((await dbService).getDetail('movie', id));
+        const res = new Movie(await (await dbService).getDetail('movie', id));
         res.thumbnail.actor_list = (await (await dbService).getActorList(id)).map(n => {
             return {
                 id: n.id,
@@ -72,17 +69,13 @@ class Movie {
                 image: m.image,
             }
         });
-        // The first page review
-        res.review_list = (await (await dbService).getReviewList(id, perPage.review, 1));
+        res.total_review_page = Math.ceil((await (await dbService).getTotalReview(id)) / perPage.review);
         return res;
     }
 
     static async getPageReviewList(id, pageNum) {
-        return (await (await dbService).getReviewList(id, perPage.review, pageNum)).res.map(
-            r => {
-                return new Review(r);
-            }
-        );
+        const res = (await (await dbService).getReviewList(id, perPage.review, pageNum));
+        return res.map(r => { return new Review(r); });
     }
 
     static async search(key) {

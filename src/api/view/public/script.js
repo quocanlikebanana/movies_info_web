@@ -1,4 +1,4 @@
-export { SimpleMovie, toSimpleMovie, currencyToNumber, toggleDarkMode };
+export { SimpleMovie, toThumbnailMovie as toSimpleMovie, currencyToNumber, toggleDarkMode };
 
 class SimpleMovie {
     constructor(id, name, year, imgSrc) {
@@ -9,9 +9,10 @@ class SimpleMovie {
     }
 }
 
-function toSimpleMovie(movie) {
+function toThumbnailMovie(movie) {
     return new SimpleMovie(movie['id'], movie['title'], movie['year'], movie['image']);
 }
+
 
 function currencyToNumber(currency) {
     const str = currency.replace(/[$,]+/g, '');

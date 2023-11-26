@@ -2,7 +2,7 @@ const { express } = require('./lib');
 const app = express();
 
 const perPage = {
-    review: 5,
+    review: 3,
     search: 15,
     fav: 15,
 
