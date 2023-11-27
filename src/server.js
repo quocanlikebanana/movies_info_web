@@ -33,9 +33,16 @@ app.use('/fav', favRouter);
 
 app.use('/name', nameRouter);
 
+// === Test ZOne:
+
 // Error trggier
 app.use('/error', (req, res, next) => {
     next(new HTMLDisplayError('This Error is intesional', 'Please don\'t consider this as a serious problem.'));
+});
+
+// Engine test:
+app.get('/engine', (req, res, next) => {
+    res.render('public/test/engine_test', { a: 'An Ngo' });
 });
 
 // === mdw:
@@ -46,8 +53,6 @@ const { HTMLDisplayError } = require('./api/helper/classes');
 app.use(express.urlencoded({
     extended: true
 }))
-
-
 
 app.use(
     errorHandler.logDisplay,
@@ -67,7 +72,7 @@ app.use(
 // === No route is caught => 404
 
 app.get('*', (req, res, next) => {
-    res.render('errors/404', {});
+    res.render('public/errors/404', {});
 });
 
 // ==================================
