@@ -40,7 +40,7 @@ export default {
                         <component :is="cardUsed"
                             :data="data"
                             @requestDetailMovie="id => this.$emit('requestDetailMovie', id)"
-                            @requestDeleteFav="id => this.$emit('requestDeleteFav', id)">
+                            @requestFavDelete="id => this.$emit('requestFavDelete', id)">
                         </component>
                     </div>
                 </template>

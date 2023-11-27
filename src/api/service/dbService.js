@@ -133,15 +133,13 @@ const dbService = (async () => {
         },
 
         async insertFavMovie(movieId) {
-            const query = pgp.helpers.insert({ movie_id: movieId }, null, 'movie_fav') + ' RETURNING id';
-            const result = await DbAccess(currentDb, 'one', query);
-            return result.id;
+            const query = pgp.helpers.insert({ movie_id: movieId }, null, 'movie_fav') + ' ON CONFLICT DO NOTHING';
+            await DbAccess(currentDb, 'none', query);
         },
 
         async deleteFavMovie(movieId) {
-            const query = `DELETE FROM movie_fav WHERE id = $1:value RETURNING id`;
-            const result = await DbAccess(currentDb, 'one', query);
-            return result.id;
+            const query = `DELETE FROM movie_fav WHERE movie_id = \'$1:value\'`;
+            await DbAccess(currentDb, 'none', query, [movieId]);
         },
 
         // === NAME:

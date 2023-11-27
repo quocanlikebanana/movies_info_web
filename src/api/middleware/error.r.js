@@ -1,27 +1,25 @@
+const { HTMLDisplayError } = require('../helper/classes');
+
 module.exports = {
-    handleError: function (app) {
-        app.use(
-            (err, req, res, next) => {
-                console.error(err.stack)
-                next(err)
-            },
-            (err, req, res, next) => {
-                if (err instanceof Error) {
-                    next(err);
-                } else {
-                    res.status(500).json({ title: err.title, message: err.message });
-                }
-            },
-            (err, req, res, next) => {
-                res.status(500).send('Something unknown...');
-            }
-        );
-
-        app.get('*', (req, res, next) => {
-            res.render('errors/404', {});
-        });
-
-
-    }
+    logDisplay: (err, req, res, next) => {
+        console.error(err.stack)
+        next(err)
+    },
+    xmlhttpError: (err, req, res, next) => {
+        if (req.xhr) {
+            res.status(500).send({ error: 'Something failed!' })
+        } else {
+            next(err)
+        }
+    },
+    predictedErrorPageDisplay: (err, req, res, next) => {
+        if (err.title != null && err.message != null) {
+            res.status(500).render('public/errors/500', { title: err.title, message: err.message });
+        } else {
+            next(err);
+        }
+    },
+    finalHandler: (err, req, res, next) => {
+        res.status(500).send('Something went down ... (:<)');
+    },
 }
-

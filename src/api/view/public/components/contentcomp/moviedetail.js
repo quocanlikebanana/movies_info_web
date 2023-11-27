@@ -1,5 +1,6 @@
 import fetch from '../../fetch.js';
 import myPagination from './sub/paginationbar.js';
+import myCarouselslide from './sub/carouselslide.js';
 
 export default {
     data() {
@@ -15,6 +16,7 @@ export default {
 
     components: {
         myPagination,
+        myCarouselslide,
     },
 
     inject: {
@@ -29,6 +31,8 @@ export default {
 
     emits: {
         requestNameDetail: null,
+        requestFavInsert: null,
+        requestDetailMovie: null,
     },
 
     computed: {
@@ -102,16 +106,23 @@ export default {
                         </p>
                         <div class="mt-5 algin-self-end">
                             <button class="btn btn-danger"
-                                @click="$emit('addToFav', movieDetail.id)">
+                                @click="$emit('requestFavInsert', movieDetail.id)">
                                 <span><i class="fa fa-heart"></i> Favorite</span>
                             </button>
                         </div>
                     </div>
                 </div>
 
+                <!-- Similar Crs -->
+                <p class="fw-bold text-primary text-decoration-underline mt-5"
+                    style="font-size: 1.5em;">Related:</p>
+                <myCarouselslide :listDataProp="movieDetail.thumbnail.similar_list"
+                    :myId="'similarMovieCrs'"
+                    @requestDetailMovie="id => this.$emit('requestDetailMovie', id)"/>
+
                 <!-- Review -->
 
-                <p class="fw-bold text-primary text-decoration-underline"
+                <p class="fw-bold text-primary text-decoration-underline mt-5"
                     style="font-size: 1.5em;">Reviews:</p>
                 <div class="row row-cols-1 d-flex flex-column p-2 gy-4">
                     <template v-for="rev in displayReview">

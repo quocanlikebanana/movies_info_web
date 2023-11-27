@@ -1,11 +1,8 @@
 const { express } = require('../../config/lib');
+const { getIntro } = require('../controller/intro.c');
+
 const router = express.Router();
-const { Intro } = require('../model/intro.m');
 
-
-router.get('/', async (req, res, next) => {
-    const result = await Intro.get();
-    res.json(result);
-});
+router.get('/', getIntro);
 
 module.exports = { router };

@@ -33,10 +33,41 @@ app.use('/fav', favRouter);
 
 app.use('/name', nameRouter);
 
+// Error trggier
+app.use('/error', (req, res, next) => {
+    next(new HTMLDisplayError('This Error is intesional', 'Please don\'t consider this as a serious problem.'));
+});
 
-// For render error purpose (on fetch request)
-app.get('/error', (req, res, next) => {
-    res.status(500).render('errors/error', {});
+// === mdw:
+
+const errorHandler = require('./api/middleware/error.r');
+const { HTMLDisplayError } = require('./api/helper/classes');
+
+app.use(express.urlencoded({
+    extended: true
+}))
+
+
+
+app.use(
+    errorHandler.logDisplay,
+    errorHandler.xmlhttpError,
+    errorHandler.predictedErrorPageDisplay,
+    errorHandler.finalHandler
+);
+
+// app.use(errorHandler.logDisplay);
+
+// app.use(errorHandler.xmlhttpError);
+
+// app.use(errorHandler.predictedErrorPageDisplay);
+
+// app.use(errorHandler.finalHandler);
+
+// === No route is caught => 404
+
+app.get('*', (req, res, next) => {
+    res.render('errors/404', {});
 });
 
 // ==================================
@@ -45,17 +76,13 @@ app.listen(port, hostName, async () => {
     console.log(`Server is on: http://${hostName}:${port}`);
 });
 
-// ==================================
-
-// const { handleError } = require('./app/router/error.r');
-// handleError(app);
 
 // ==================================
 // >> DEBUGGING PART
 // ==================================
 
-app.get('/debug', (req, res, next) => {
-});
+// app.get('/debug', (req, res, next) => {
+// });
 
 // ==================================
 // << DEBUGGING PART

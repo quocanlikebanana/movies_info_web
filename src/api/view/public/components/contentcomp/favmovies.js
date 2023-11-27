@@ -6,15 +6,26 @@ export default {
     data() {
         return {
             cardUsed: 'myDeleteablecard',
-            displayFav: [],
         }
     },
 
     mounted() {
-        this.updatePageFav(1);
+        this.$emit('requestFavPage', 1);
     },
 
-    created() {
+    props: {
+        favPage: {
+            type: Array,
+        },
+        totalFavPage: {
+            default: 0,
+        },
+    },
+
+    emits: {
+        requestDetailMovie: null,
+        requestFavDelete: null,
+        requestFavPage: null,
     },
 
     components: {
@@ -23,26 +34,22 @@ export default {
     },
 
     methods: {
-        async updatePageFav(pageNum) {
-            const json = await fetch.getPageFavMovie(pageNum);
-
-        }
     },
 
     template: /*html*/
         `
         <div class="container-fluid">
-            <p class="fw-medium fs-2 text-sucess-emphasis mb-5">Phim Ưa Thích</p>
             <div class="row">
-                <div class="col col-md-7">
-                    <myCardview :cardUsed="cardUsed"
-                        :listDataProp="displayFav"
-                        @requestDetailMovie="id => this.$emit('requestDetailMovie', id)"
-                        @/>
-                    <myPaginationbar class="mt-5"
-                        :totalPage="totalPage"
-                        @pageChanged="(pageNum) => update(pageNum)"/>
-                </div>
+                <p class="fw-medium fs-2 text-sucess-emphasis mb-5">Phim Ưa Thích</p>
+            </div>
+            <div class="row">
+                <myCardview :cardUsed="cardUsed"
+                    :listDataProp="favPage"
+                    @requestDetailMovie="id => this.$emit('requestDetailMovie', id)"
+                    @requestFavDelete="id => this.$emit('requestFavDelete', id)"/>
+                <myPaginationbar class="mt-5"
+                    :totalPage="totalFavPage"
+                    @pageChanged="(pageNum) => this.$emit('requestFavPage', pageNum)"/>
             </div>
         </div>
         `,

@@ -79,14 +79,14 @@ export default {
         </div>
 
         <!-- Most popular -->
-        <p class="my-2">Most Popular:</p>
+        <p class="my-2">Top Box Office:</p>
         <!-- List movie carousel -->
         <myCarouselslide :listDataProp="top30Boxoffice"
             :myId="'popularMulCrs'"
             @requestDetailMovie="id => singCsrImgClick(id)"/>
 
         <!-- Top Rating -->
-        <p class="my-2">Top Rating:</p>
+        <p class="my-2">Most Favorite:</p>
         <!-- List movie carousel -->
         <myCarouselslide :listDataProp="top30Mostfav"
             :myId="'ratingMulCrs'"

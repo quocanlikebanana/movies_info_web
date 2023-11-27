@@ -65,8 +65,9 @@ class Movie {
         res.thumbnail.similar_list = (await (await dbService).getSimilarList(id)).map(m => {
             return {
                 id: m.id,
-                full_titletitle: m.full_title,
+                title: m.full_title,
                 image: m.image,
+                year: m.year,
             }
         });
         res.total_review_page = Math.ceil((await (await dbService).getTotalReview(id)) / perPage.review);

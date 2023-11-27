@@ -9,6 +9,10 @@ export default {
         }
     },
 
+    mounted() {
+        console.log();
+    },
+
     props: {
         listDataProp: {
             required: true,
@@ -21,13 +25,21 @@ export default {
     },
 
     computed: {
+
+    },
+
+    methods: {
         dataSlides() {
-            const buffer = [];
+            const buffer = [[]];
             this.numSlide = Math.ceil(this.listDataProp.length / this.numItemPerSlide);
             for (let i = 0; i < this.numSlide; i++) {
                 buffer[i] = [];
                 for (let j = 0; j < this.numItemPerSlide; j++) {
-                    buffer[i][j] = this.listDataProp[i * this.numItemPerSlide + j];
+                    if (this.listDataProp[i * this.numItemPerSlide + j] === undefined) {
+                        break;
+                    } else {
+                        buffer[i].push(this.listDataProp[i * this.numItemPerSlide + j]);
+                    }
                 }
             }
             return buffer;
@@ -40,7 +52,7 @@ export default {
             class="carousel slide carousel-fade container-fluid my-3
             css-mulCrs carousel-dark">
             <div class="carousel-indicators">
-                <template v-for="(slides, n) in dataSlides">
+                <template v-for="(slides, n) in dataSlides()">
                     <button type="button"
                         :data-bs-target="'#' + myId"
                         :data-bs-slide-to="n"
@@ -50,7 +62,7 @@ export default {
                 </template>
             </div>
             <div class="carousel-inner overflow-visible">
-                <template v-for="(slides, n) in dataSlides">
+                <template v-for="(slides, n) in dataSlides()">
                     <div class="carousel-item"
                         :class="{active: n === 0}"
                         data-bs-interval="3000">

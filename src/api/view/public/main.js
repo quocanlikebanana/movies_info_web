@@ -96,8 +96,8 @@ export default {
             }
         },
 
-        async goFav() {
-
+        goFav() {
+            this.currentContentView = 'myFavmovies';
         },
 
         async searchHandler(key) {
@@ -129,7 +129,8 @@ export default {
             <myContent
                 :currentView="currentContentView"
                 @requestDetailMovie="(id) => requestDetailMovieHandler(id)"
-                @requestNameDetail="(id) => requestNameDetailHandler(id)"/>
+                @requestNameDetail="(id) => requestNameDetailHandler(id)"
+                @goFav="goFav"/>
 
             <!-- Footer -->
             <myFooter />
