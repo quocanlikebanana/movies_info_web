@@ -108,31 +108,42 @@ const exprhandler = (() => {
 
                 const rawReg = buffer.match(startExprReg)[0];
 
-                // Remove the tag, and no add
-                content = content.replace(rawReg, '');
-                buffer = buffer.replace(rawReg, '');
-
                 const startNextContent = startOffset;
 
+                let flag = false;
                 if (/\/for/g.test(rawReg) === true) {
                     top().forEnd = startNextContent;
                     evaluateTop();
+                    flag = true;
                 } else if (/for/g.test(rawReg) === true) {
                     const sE = /^21190{\s*for\s+/g;
                     const eE = /\s*}$/g;
                     const expr = rawReg.replace(sE, '').replace(eE, '');
                     push(new ForExpr('for', expr, startNextContent));
+                    flag = true;
                 } else if (/\/if/g.test(rawReg) === true) {
                     top().elseEnd = startNextContent;
                     evaluateTop();
+                    flag = true;
                 } else if (/if/g.test(rawReg) === true) {
                     const sE = /^21190{\s*if\s+/g;
                     const eE = /\s*}$/g;
                     const expr = rawReg.replace(sE, '').replace(eE, '');
                     push(new IfExpr('for', expr, startNextContent));
+                    flag = true;
                 } else if (/else/g.test(rawReg) === true) {
                     top().ifEnd = startNextContent;
                     top().elseStart = startNextContent;
+                    flag = true;
+                } else {
+                    console.log('test');
+                }
+
+                buffer = buffer.replace(rawReg, '');
+
+                if (flag) {
+                    // Remove the tag, and no add
+                    content = content.replace(rawReg, '');
                 }
             }
         },
@@ -158,9 +169,9 @@ module.exports = {
 
         // === Expr:
 
-        exprhandler.init(content, engineOptions);
-        exprhandler.read();
-        content = exprhandler.getContent();
+        // exprhandler.init(content, engineOptions);
+        // exprhandler.read();
+        // content = exprhandler.getContent();
 
         return callback(null, content);
 

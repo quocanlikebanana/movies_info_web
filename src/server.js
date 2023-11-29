@@ -35,15 +35,15 @@ app.use('/name', nameRouter);
 
 // === Test ZOne:
 
-// Error trggier
-app.use('/error', (req, res, next) => {
-    next(new HTMLDisplayError('This Error is intesional', 'Please don\'t consider this as a serious problem.'));
-});
+// // Error trggier
+// app.use('/error', (req, res, next) => {
+//     next(new HTMLDisplayError('This Error is intesional', 'Please don\'t consider this as a serious problem.'));
+// });
 
-// Engine test:
-app.get('/engine', (req, res, next) => {
-    res.render('public/test/engine_test', { a: 'An Ngo' });
-});
+// // Engine test:
+// app.get('/engine', (req, res, next) => {
+//     res.render('public/test/engine_test', { a: 'An Ngo' });
+// });
 
 // === mdw:
 
@@ -70,6 +70,10 @@ app.use(
 // app.use(errorHandler.finalHandler);
 
 // === No route is caught => 404
+
+app.get('/favicon.ico', (req, res, next) => {
+    res.status(200).end();
+});
 
 app.get('*', (req, res, next) => {
     res.render('public/errors/404', {});
